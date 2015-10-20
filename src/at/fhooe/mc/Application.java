@@ -4,7 +4,7 @@ import at.fhooe.mc.view.DrawWindow;
 
 public class Application {
 	public static void main(String[] args) {
-		System.out.println("Hello World!");
+		//test comment
 		new DrawWindow("Simple Graphic Editor");
 	}
 }

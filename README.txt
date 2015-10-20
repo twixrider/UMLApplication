@@ -1,0 +1,3 @@
+the eclipse workspace of this application is in the windows-folder:
+
+D:\FH\FH_MCM_01\SystemsEngineering\Eclipse_Workspace

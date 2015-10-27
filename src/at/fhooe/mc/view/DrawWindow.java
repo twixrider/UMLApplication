@@ -3,6 +3,7 @@ package at.fhooe.mc.view;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Panel;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -21,7 +22,12 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 	
 	Button mRectButton;
 	Button mLineButton;
+	Button mCommentButton;
+	Button mMoveButton;
+	Button mTextButton;
 	Button mClearButton;
+	
+	public static TextField mTextField;
 	
 	public DrawWindow(String _name) {
 		this.setTitle(_name);
@@ -42,6 +48,9 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 		
 		this.add(mButtPanel, BorderLayout.NORTH);
 		this.add(mDrawingPanel, BorderLayout.CENTER);
+		
+		mTextField = new TextField();
+		this.add(mTextField, BorderLayout.SOUTH);
 	}
 	
 	private void createButtons() {	
@@ -53,9 +62,22 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 		mLineButton.addActionListener(this);
 		mButtPanel.add(mLineButton);
 		
+		mCommentButton = new Button("Comment");
+		mCommentButton.addActionListener(this);
+		mButtPanel.add(mCommentButton);
+		
+		mMoveButton = new Button("Move");
+		mMoveButton.addActionListener(this);
+		mButtPanel.add(mMoveButton);
+		
+		mTextButton = new Button("Text");
+		mTextButton.addActionListener(this);
+		mButtPanel.add(mTextButton);
+		
 		mClearButton = new Button("Clear");
 		mClearButton.addActionListener(this);
 		mButtPanel.add(mClearButton);
+		
 	}
 
 	@Override
@@ -66,6 +88,15 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 			} else if(_event.getSource() == mLineButton) {
 				System.out.println("Line Button");
 				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_LINE);
+			} else if(_event.getSource() == mCommentButton) {
+				System.out.println("Comment Button");
+				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_COMM);
+			} else if(_event.getSource() == mMoveButton) {
+				System.out.println("Move Button");
+				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_MOVE);
+			} else if(_event.getSource() == mTextButton) {
+				System.out.println("Text Button");
+				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_TEXT);
 			} else if(_event.getSource() == mClearButton) {
 				System.out.println("Clear Button");
 				mDrawingPanel.clearWindow();

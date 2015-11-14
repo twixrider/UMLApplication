@@ -1,15 +1,15 @@
 package at.fhooe.mc.shape;
 
-import java.awt.Graphics;
+import java.util.Observable;
 
-public interface ShapePrimitive {
+import at.fhooe.mc.view.DrawPanel;
+
+public abstract class ShapePrimitive extends Observable implements IShapePrimitive{
+
+	DrawPanel mDrawPanel;
 	
-	public void setText(String _str);
-	
-	public void draw(Graphics _graphics);
-	
-	public void move(int _dX, int _dY);	
-	
-	public boolean clickInside(int _clickX, int _clickY);
-	
+	public ShapePrimitive(DrawPanel _panel) {
+		this.mDrawPanel = _panel;
+		this.addObserver(mDrawPanel);
+	}	
 }

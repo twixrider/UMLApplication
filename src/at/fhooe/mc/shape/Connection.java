@@ -1,9 +1,12 @@
 package at.fhooe.mc.shape;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 
-public class Line implements ShapePrimitive{
+import at.fhooe.mc.view.DrawPanel;
+
+public class Connection extends ShapePrimitive{
 
 	public int mStartX;
 	public int mStartY;
@@ -19,9 +22,19 @@ public class Line implements ShapePrimitive{
 	
 	private String mText;
 	
-	public Line(RectangleObject _startRect, RectangleObject _endRect) {
+	public Connection(RectangleObject _startRect, RectangleObject _endRect, DrawPanel _panel) {
+		super(_panel);
+		
 		mStartRect = _startRect;
 		mEndRect = _endRect;
+			
+		setChanged();
+        notifyObservers();
+	}
+	
+	@Override
+	public void draw(Graphics _graphics) {
+		_graphics.setColor(Color.BLACK);
 		
 		if(mStartRect != null) {
 			mStartX = mStartRect.mStartX + (mStartRect.mWidth / 2);
@@ -33,13 +46,10 @@ public class Line implements ShapePrimitive{
 				mWidth = mEndX - mStartX;
 				mHeight = mEndY - mStartY;
 			}
-		}	
-	}
-	
-	@Override
-	public void draw(Graphics _graphics) {
-		System.out.println("Draw Line from: " + mStartX + "," + mStartY+" to " + mEndX + "," + mEndY);
-		_graphics.drawLine(mStartX, mStartY, mEndX, mEndY);
+		}
+		
+		_graphics.drawLine(this.mStartX, this.mStartY, this.mEndX, this.mEndY);
+		
 		if(mText != null) {
 			_graphics.drawString(mText, mStartX+(mWidth/2), mStartY+(mHeight/2));
 		}
@@ -52,21 +62,21 @@ public class Line implements ShapePrimitive{
 		boundingBox.setFrame(mStartX, mStartY, mWidth, mHeight);
 			
 		if(boundingBox.contains(_clickX, _clickY)) {
-			System.out.println("CLick inside");	
 			return true;
 		} else {
-			System.out.println("Click outside");
 			return false;
 		}
 	}
 
 	@Override
-	public void move(int _dX, int _dY) {}
+	public void move(int _dX, int _dY) {
+		// Lines should not be moved
+	}
 
 	@Override
 	public void setText(String _str) {
-		mText = _str;		
+		mText = _str;	
+		setChanged();
+        notifyObservers();
 	}
-	
-	
 }

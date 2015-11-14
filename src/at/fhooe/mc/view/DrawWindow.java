@@ -42,7 +42,7 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 		
 		createButtons();
 		
-		this.setSize(700, 600);
+		this.setSize(1000, 700);
 		this.setVisible(true);
 		this.setLayout(new BorderLayout());
 		
@@ -83,22 +83,16 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent _event) {	
 			if(_event.getSource() == mRectButton) {
-				System.out.println("Rect Button");
 				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_RECT);
 			} else if(_event.getSource() == mLineButton) {
-				System.out.println("Line Button");
 				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_LINE);
 			} else if(_event.getSource() == mCommentButton) {
-				System.out.println("Comment Button");
 				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_COMM);
 			} else if(_event.getSource() == mMoveButton) {
-				System.out.println("Move Button");
 				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_MOVE);
 			} else if(_event.getSource() == mTextButton) {
-				System.out.println("Text Button");
 				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_TEXT);
 			} else if(_event.getSource() == mClearButton) {
-				System.out.println("Clear Button");
 				mDrawingPanel.clearWindow();
 			} else {
 				System.out.println("Error in actionPerformed, no button");

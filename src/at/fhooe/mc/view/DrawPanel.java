@@ -5,12 +5,14 @@ import java.awt.Graphics;
 import java.awt.Panel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import at.fhooe.mc.shape.CommentObject;
-import at.fhooe.mc.shape.Line;
+import at.fhooe.mc.shape.Connection;
 import at.fhooe.mc.shape.RectangleObject;
-import at.fhooe.mc.shape.ShapePrimitive;
 
 /**
  * Here is actually the Drawing.
@@ -18,7 +20,7 @@ import at.fhooe.mc.shape.ShapePrimitive;
  *
  */
 @SuppressWarnings("serial")
-public class DrawPanel extends Panel implements MouseListener{
+public class DrawPanel extends Panel implements MouseListener, Observer, MouseMotionListener {
 
 	public static final String BUTTON_TYPE_RECT = "rect";
 	public static final String BUTTON_TYPE_LINE = "line";
@@ -26,19 +28,20 @@ public class DrawPanel extends Panel implements MouseListener{
 	public static final String BUTTON_TYPE_MOVE = "move";
 	public static final String BUTTON_TYPE_TEXT = "text";
 	
-	ArrayList<ShapePrimitive> mShapeList = new ArrayList<ShapePrimitive>();
+	ArrayList<RectangleObject> mRectangleList = new ArrayList<RectangleObject>();
+	ArrayList<Connection> mConnectionList = new ArrayList<Connection>();
+	ArrayList<CommentObject> mCommentList = new ArrayList<CommentObject>();
 	
 	String mButtonType;
+	
+	//for move operation
 	private int mStartX;
 	private int mStartY;
 	
 	//for lines
 	private RectangleObject mStartRect = null;
 	private RectangleObject mEndRect = null;
-	
-	private boolean mMouseInsideOnPress = false;
-	private RectangleObject mMovedRect;
-	
+		
 	public void setButtonType(String mButtonType) {
 		this.mButtonType = mButtonType;
 	}
@@ -46,10 +49,13 @@ public class DrawPanel extends Panel implements MouseListener{
 	public DrawPanel() {
 		this.setBackground(Color.LIGHT_GRAY);
 		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 	}
 	
 	public void clearWindow() {	
-		mShapeList.clear();
+		mRectangleList.clear();
+		mConnectionList.clear();
+		mCommentList.clear();
 		mStartRect = null;
 		mEndRect = null;
 		repaint();
@@ -57,43 +63,51 @@ public class DrawPanel extends Panel implements MouseListener{
 	
 	@Override
 	public void paint(Graphics _graphics) {
-		_graphics.setColor(Color.BLACK);
+				
+		for(RectangleObject rect : mRectangleList) {
+			rect.draw(_graphics);
+		}
 		
-		for(ShapePrimitive shape : mShapeList) {
-			shape.draw(_graphics);
+		for(Connection conn : mConnectionList) {
+			conn.draw(_graphics);
+		}
+		
+		for(CommentObject comm : mCommentList) {
+			comm.draw(_graphics);
 		}
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent _event) {
-		mStartX = _event.getX();
-		mStartY = _event.getY();
-		
+	public void mouseClicked(MouseEvent _event) {		
 		if(mButtonType == DrawPanel.BUTTON_TYPE_RECT) {
-			System.out.println("Pressed at: " + mStartX + "," + mStartY);
-			mShapeList.add(new RectangleObject(mStartX, mStartY));
+			mRectangleList.add(new RectangleObject(this, _event.getX(), _event.getY()));
 			
 		} else if(mButtonType == DrawPanel.BUTTON_TYPE_TEXT) {
-			for(ShapePrimitive shape : mShapeList) {
-					if(shape.clickInside(_event.getX(), _event.getY())) {
-						shape.setText(DrawWindow.mTextField.getText());
+			for(RectangleObject rect : mRectangleList) {
+					if(rect.clickInside(_event.getX(), _event.getY())) {
+						rect.setText(DrawWindow.mTextField.getText());
 					}
+			}
+			for(Connection conn : mConnectionList) {
+				if(conn.clickInside(_event.getX(), _event.getY())) {
+					conn.setText(DrawWindow.mTextField.getText());
+				}	
+			}
+			for(CommentObject comm : mCommentList) {
+				if(comm.clickInside(_event.getX(), _event.getY())) {
+					comm.setText(DrawWindow.mTextField.getText());
+				}	
 			}
 		} else if(mButtonType == DrawPanel.BUTTON_TYPE_COMM) {
-			RectangleObject tempRect;
-			for(ShapePrimitive shape : mShapeList) {
-				if(shape.getClass().equals(RectangleObject.class)) {
-					tempRect = (RectangleObject)shape;
-					if(tempRect.clickInside(_event.getX(), _event.getY())) {
-						mStartRect = tempRect;
-					}
+			
+			for(RectangleObject rect : mRectangleList) {
+				if(rect.clickInside(_event.getX(), _event.getY())) {
+					mCommentList.add(new CommentObject(rect, this));
 				}
 			}
-			mShapeList.add(new CommentObject(mStartRect));
 		} else {
 			System.out.println("Error in Paint, Wrong Button");
 		}		
-		repaint();
 	}
 
 	@Override
@@ -105,60 +119,83 @@ public class DrawPanel extends Panel implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent _event) {
 		if(mButtonType == DrawPanel.BUTTON_TYPE_LINE) {	
-			RectangleObject tempRect;
-			for(ShapePrimitive shape : mShapeList) {
-				if(shape.getClass().equals(RectangleObject.class)) {
-					tempRect = (RectangleObject)shape;
-					if(tempRect.clickInside(_event.getX(), _event.getY())) {
-							mStartRect = tempRect;
+			for(RectangleObject rect : mRectangleList) {
+				if(rect.getClass().equals(RectangleObject.class)) {
+					if(rect.clickInside(_event.getX(), _event.getY())) {
+							mStartRect = rect;
 					}	
 				}
-			}
-		
-		} 
-//		else if(mButtonType == DrawPanel.BUTTON_TYPE_MOVE) {
-//			for(ShapePrimitive shape : mShapeList) {
-//				if(shape.getClass().equals(RectangleObject.class)) {
-//					if(((RectangleObject)shape).clickInside(_event.getX(), _event.getY())) {
-//						((RectangleObject)shape).mStartX = _event.getX()/((RectangleObject)shape).mWidth/2;
-//						((RectangleObject)shape).mStartY = _event.getY()/((RectangleObject)shape).mHeight/2;
-//					}	
-//				}
-//			}
-//		}
+			}		
+		} else if(mButtonType == DrawPanel.BUTTON_TYPE_MOVE) {
+			mStartX = _event.getX();
+			mStartY = _event.getY();	
+		}
 	}
 	
 
 	@Override
 	public void mouseReleased(MouseEvent _event) {
 		if(mButtonType == DrawPanel.BUTTON_TYPE_LINE) {	
-			RectangleObject tempRect;
-			for(ShapePrimitive shape : mShapeList) {
-				if(shape.getClass().equals(RectangleObject.class)) {
-					tempRect = (RectangleObject)shape;
-					if(tempRect.clickInside(_event.getX(), _event.getY())) {
-							mEndRect = tempRect;
+			for(RectangleObject rect : mRectangleList) {
+				if(rect.getClass().equals(RectangleObject.class)) {
+					if(rect.clickInside(_event.getX(), _event.getY())) {
+							mEndRect = rect;
+							mConnectionList.add(new Connection(mStartRect, mEndRect, this));
 					}	
 				}
-			}
-			mShapeList.add(new Line(mStartRect, mEndRect));
+			}	
+			
 		} 
-		
+	}
 
-		
-		
-		
-//      else if(mButtonType == DrawPanel.BUTTON_TYPE_MOVE) {
-//			RectangleObject tempRect;
-//			for(ShapePrimitive shape : mShapeList) {
-//			if(shape.getClass().equals(RectangleObject.class)) {
-//				tempRect = (RectangleObject)shape;
-//				if(tempRect.clickInside(_event.getX(), _event.getY())) {
-//					mMovedRect = tempRect;	
-//				}	
-//			}
-//		}
-//	}
-		repaint();
+	@Override
+	public void update(Observable _observalbe, Object _object) {
+		repaint();	
+	}
+
+	// ##### Mouse Motion Listener ####
+	@Override
+	public void mouseDragged(MouseEvent _event) {
+		if(mButtonType == DrawPanel.BUTTON_TYPE_MOVE) {
+			for(RectangleObject rect : mRectangleList) {
+				if(rect.clickInside(_event.getX(), _event.getY())) {
+					
+					int dX = _event.getX() - mStartX;
+					int dY = _event.getY() - mStartY;
+					
+					rect.move(dX, dY);
+					
+					mStartX = _event.getX();
+					mStartY = _event.getY();
+				}
+			}
+			for(Connection conn : mConnectionList) {
+				if(conn.clickInside(_event.getX(), _event.getY())) {
+					int dX = _event.getX() - mStartX;
+					int dY = _event.getY() - mStartY;
+					
+					conn.move(dX, dY);
+					
+					mStartX = _event.getX();
+					mStartY = _event.getY();
+				}	
+			}
+			for(CommentObject comm : mCommentList) {
+				if(comm.clickInside(_event.getX(), _event.getY())) {
+					int dX = _event.getX() - mStartX;
+					int dY = _event.getY() - mStartY;
+					
+					comm.move(dX, dY);
+					
+					mStartX = _event.getX();
+					mStartY = _event.getY();
+				}	
+			}
+		}	
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent _event) {
+		// TODO Auto-generated method stub
 	}
 }

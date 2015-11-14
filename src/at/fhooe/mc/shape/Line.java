@@ -56,6 +56,7 @@ public class Line implements ShapePrimitive{
 			return true;
 		} else {
 			System.out.println("Click outside");
+			return false;
 		}
 	}
 

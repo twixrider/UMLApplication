@@ -13,6 +13,7 @@ import java.util.Observer;
 import at.fhooe.mc.shape.CommentObject;
 import at.fhooe.mc.shape.Connection;
 import at.fhooe.mc.shape.RectangleObject;
+import at.fhooe.mc.shape.ShapePrimitive;
 
 /**
  * Here is actually the Drawing.
@@ -37,6 +38,9 @@ public class DrawPanel extends Panel implements MouseListener, Observer, MouseMo
 	//for move operation
 	private int mStartX;
 	private int mStartY;
+	
+	//highlight operation
+	private ShapePrimitive mCurrentShape;
 	
 	//for lines
 	private RectangleObject mStartRect = null;
@@ -143,8 +147,7 @@ public class DrawPanel extends Panel implements MouseListener, Observer, MouseMo
 							mConnectionList.add(new Connection(mStartRect, mEndRect, this));
 					}	
 				}
-			}	
-			
+			}			
 		} 
 	}
 

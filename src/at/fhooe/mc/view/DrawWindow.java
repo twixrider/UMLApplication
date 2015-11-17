@@ -10,7 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * The Window Where all draw area and the Buttons are in.
+ * The Window Where draw area and the Buttons are in.
  * @author christian
  *
  */

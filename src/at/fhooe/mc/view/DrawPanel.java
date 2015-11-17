@@ -39,9 +39,6 @@ public class DrawPanel extends Panel implements MouseListener, Observer, MouseMo
 	private int mStartX;
 	private int mStartY;
 	
-	//highlight operation
-	private ShapePrimitive mCurrentShape;
-	
 	//for lines
 	private RectangleObject mStartRect = null;
 	private RectangleObject mEndRect = null;
@@ -56,6 +53,12 @@ public class DrawPanel extends Panel implements MouseListener, Observer, MouseMo
 		this.addMouseMotionListener(this);
 	}
 	
+	
+	
+	public ArrayList<Connection> getConnectionList() {
+		return mConnectionList;
+	}
+
 	public void clearWindow() {	
 		mRectangleList.clear();
 		mConnectionList.clear();
@@ -106,7 +109,8 @@ public class DrawPanel extends Panel implements MouseListener, Observer, MouseMo
 			
 			for(RectangleObject rect : mRectangleList) {
 				if(rect.clickInside(_event.getX(), _event.getY())) {
-					mCommentList.add(new CommentObject(rect, this));
+					CommentObject comment = new CommentObject(rect, this);
+					mCommentList.add(comment);
 				}
 			}
 		} else {

@@ -10,23 +10,22 @@ public class CommentObject extends ShapePrimitive {
 	private int mStartX;
 	private int mStartY;
 	
-	private int mWidth;
-	private int mHeight;
+	private int mWidth = 120;
+	private int mHeight = 100;
 	
 	private String mText;
 	
 	private RectangleObject mRect;
 		
 	public CommentObject(RectangleObject _rect, DrawPanel _panel) {
+		
 		super(_panel);
+		
 		
 		mRect = _rect;
 		
-		mWidth = 120;
-		mHeight = 100;
-		
-		mStartX = (_rect.mStartX + _rect.mWidth + 100);
-		mStartY = (_rect.mStartY + _rect.mHeight/2) - (mHeight/2);
+		mStartX = (mRect.mStartX + mRect.mWidth + mHeight);
+		mStartY = (mRect.mStartY + mRect.mHeight/2) - (mHeight/2);
 		
 		setChanged();
         notifyObservers();
@@ -36,8 +35,10 @@ public class CommentObject extends ShapePrimitive {
 	public void draw(Graphics _graphics) {
 		_graphics.setColor(Color.BLUE);
 		if(mRect != null) {
+						
 			_graphics.drawRect(this.mStartX, this.mStartY, this.mWidth, this.mHeight);
 			_graphics.setColor(Color.BLACK);
+			
 			_graphics.drawLine(
 					this.mStartX+(this.mWidth/2), 
 					this.mStartY+(this.mHeight/2), 

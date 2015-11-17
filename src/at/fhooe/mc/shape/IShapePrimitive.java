@@ -10,6 +10,5 @@ public interface IShapePrimitive {
 	
 	public void move(int _dX, int _dY);	
 	
-	public boolean clickInside(int _clickX, int _clickY);
-	
+	public boolean clickInside(int _clickX, int _clickY);	
 }

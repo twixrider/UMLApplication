@@ -35,18 +35,17 @@ public class Connection extends ShapePrimitive{
 	@Override
 	public void draw(Graphics _graphics) {
 		_graphics.setColor(Color.BLACK);
-		
 		if(mStartRect != null) {
 			mStartX = mStartRect.mStartX + (mStartRect.mWidth / 2);
 			mStartY = mStartRect.mStartY + (mStartRect.mHeight / 2);
 			if(mEndRect != null) {
 				mEndX = mEndRect.mStartX + (mEndRect.mWidth / 2);
-				mEndY = mEndRect.mStartY + (mEndRect.mHeight / 2);
-				
-				mWidth = mEndX - mStartX;
-				mHeight = mEndY - mStartY;
+				mEndY = mEndRect.mStartY + (mEndRect.mHeight / 2);				
 			}
 		}
+		
+		mWidth = mEndX - mStartX;
+		mHeight = mEndY - mStartY;
 		
 		_graphics.drawLine(this.mStartX, this.mStartY, this.mEndX, this.mEndY);
 		

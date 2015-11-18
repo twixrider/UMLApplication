@@ -14,7 +14,6 @@ import java.awt.event.WindowEvent;
  * @author christian
  *
  */
-@SuppressWarnings("serial")
 public class DrawWindow extends java.awt.Frame implements ActionListener{
 	
 	Panel mButtPanel = new Panel();

@@ -1,0 +1,24 @@
+<%@ jet package="jetgenerated" imports ="java.util.* at.fhooe.mc.shape.*" class="CodeGenerator" %>
+
+<% Object[] arguments = (Object[])argument; %>
+<% ArrayList<RectangleObject> rectangleList = (ArrayList<RectangleObject>) arguments[0]; %>
+<% ArrayList<Connection> connectionList = (ArrayList<Connection>) arguments[1]; %>
+
+public class Statemachine {
+
+String currState = rectangleList.get(0);
+
+void handleEvent(String _evt) {
+	switch (currState) {			
+<% for(RectangleObject rect : rectangleList ) { %>
+<% for (Connection conn : connectionList ) { %>
+		case <%= rect.getText() %> :
+<% if(conn.getStartRect().equals(rect)) { %>
+			if(_evt = <%= conn.getText() %> ) {
+				currState = <%= conn.getEndRect().getText() %>	
+			}	
+<% } %>
+<% } %>
+<% }%>	
+	}
+}

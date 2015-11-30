@@ -25,7 +25,8 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 	Button mMoveButton;
 	Button mTextButton;
 	Button mClearButton;
-	
+	Button mJetButton;
+
 	public static TextField mTextField;
 	
 	public DrawWindow(String _name) {
@@ -76,7 +77,11 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 		mClearButton = new Button("Clear");
 		mClearButton.addActionListener(this);
 		mButtPanel.add(mClearButton);
-		
+
+		mJetButton = new Button("Generate JET");
+		mJetButton.addActionListener(this);
+		mButtPanel.add(mJetButton);
+
 	}
 
 	@Override
@@ -93,6 +98,8 @@ public class DrawWindow extends java.awt.Frame implements ActionListener{
 				mDrawingPanel.setButtonType(DrawPanel.BUTTON_TYPE_TEXT);
 			} else if(_event.getSource() == mClearButton) {
 				mDrawingPanel.clearWindow();
+			} else if(_event.getSource() == mJetButton) {
+				mDrawingPanel.generateJet();
 			} else {
 				System.out.println("Error in actionPerformed, no button");
 			}

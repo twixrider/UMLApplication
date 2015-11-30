@@ -63,4 +63,9 @@ public class RectangleObject extends ShapePrimitive{
 		setChanged();
         notifyObservers();
 	}
+
+	@Override
+	public String getText() {
+		return mText;
+	}
 }

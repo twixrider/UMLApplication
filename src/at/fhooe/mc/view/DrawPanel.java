@@ -6,6 +6,7 @@ import java.awt.Panel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -14,6 +15,7 @@ import at.fhooe.mc.shape.CommentObject;
 import at.fhooe.mc.shape.Connection;
 import at.fhooe.mc.shape.RectangleObject;
 import at.fhooe.mc.shape.ShapePrimitive;
+import jetgenerated.CodeGenerator;
 
 /**
  * Here is actually the Drawing.
@@ -67,6 +69,16 @@ public class DrawPanel extends Panel implements MouseListener, Observer, MouseMo
 		mEndRect = null;
 		repaint();
 	}
+
+	public void generateJet() {
+		//todo: pass arguments
+		CodeGenerator generator = new CodeGenerator();
+		Object[] argument = new Object[2];
+		argument[0] = mRectangleList;
+		argument[1] = mConnectionList;
+		String result = generator.generate(argument);
+		System.out.println(result);
+	}
 	
 	@Override
 	public void paint(Graphics _graphics) {
@@ -96,7 +108,7 @@ public class DrawPanel extends Panel implements MouseListener, Observer, MouseMo
 					}
 			}
 			for(Connection conn : mConnectionList) {
-				if(conn.clickInside(_event.getX(), _event.getY())) {
+				if(conn.getShape().getBounds().contains(_event.getX(), _event.getY())) {
 					conn.setText(DrawWindow.mTextField.getText());
 				}	
 			}

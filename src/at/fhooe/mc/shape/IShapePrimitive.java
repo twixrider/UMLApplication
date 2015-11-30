@@ -6,6 +6,8 @@ public interface IShapePrimitive {
 	
 	public void setText(String _str);
 	
+	public String getText();
+	
 	public void draw(Graphics _graphics);
 	
 	public void move(int _dX, int _dY);	

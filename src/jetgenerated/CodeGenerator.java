@@ -21,7 +21,7 @@ public class CodeGenerator
   protected final String TEXT_4 = " :";
   protected final String TEXT_5 = NL + "\t\t\tif(_evt = ";
   protected final String TEXT_6 = " ) {" + NL + "\t\t\t\tcurrState = ";
-  protected final String TEXT_7 = "\t" + NL + "\t\t\t}\t";
+  protected final String TEXT_7 = NL + "\t\t\t}\t";
   protected final String TEXT_8 = "\t" + NL + "\t}" + NL + "}";
 
   public String generate(Object argument)

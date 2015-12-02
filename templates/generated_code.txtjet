@@ -15,7 +15,7 @@ void handleEvent(String _evt) {
 		case <%= rect.getText() %> :
 <% if(conn.getStartRect().equals(rect)) { %>
 			if(_evt = <%= conn.getText() %> ) {
-				currState = <%= conn.getEndRect().getText() %>	
+				currState = <%= conn.getEndRect().getText() %>
 			}	
 <% } %>
 <% } %>
